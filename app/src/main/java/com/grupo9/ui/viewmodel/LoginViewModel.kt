@@ -16,17 +16,17 @@ class LoginViewModel : ViewModel() {
     var uiState by mutableStateOf(LoginModel())
         private set
 
-    var errormMessage by mutableStateOf<String?>(null)
+    var errorMessage by mutableStateOf<String?>(null)
         private set
 
     fun onEmailChanged(email: String) {
         uiState = uiState.copy(email = email)
-        errormMessage = null
+        errorMessage = null
     }
 
     fun onPasswordChanged(password: String) {
         uiState = uiState.copy(password = password)
-        errormMessage = null
+        errorMessage = null
     }
 
     fun onLoginClick(context: Context, onSuccess: () -> Unit) {
@@ -34,7 +34,7 @@ class LoginViewModel : ViewModel() {
         val password = uiState.password
 
         if (email.isBlank() || password.isBlank()) {
-            errormMessage = "Ingresa correo y contraseña"
+            errorMessage = "Ingresa correo y contraseña"
             return
         }
 
@@ -43,11 +43,11 @@ class LoginViewModel : ViewModel() {
             val user = db.userDao().getUserByEmail(email)
 
             if (user != null && user.password == password) {
-                errormMessage = null
+                errorMessage = null
                 Sesion.correo = email
                 onSuccess()
             } else {
-                errormMessage = "Correo o contraseña incorrectos"
+                errorMessage = "Correo o contraseña incorrectos"
             }
         }
     }

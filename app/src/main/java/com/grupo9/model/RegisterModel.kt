@@ -1,6 +1,6 @@
 package com.grupo9.model
 
-import android.os.Message
+
 
 data class RegisterModel(
     val name: String = "",

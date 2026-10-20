@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -56,12 +55,12 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .background(BlancoHueso)
                     .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(modifier = Modifier.size(35.dp))
+                Spacer(modifier = Modifier.size(60.dp))
 
                 Column(
-                    modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -108,56 +107,41 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                BotonCategoria("Todos", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Todos") }
-                BotonCategoria("Tortas", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Tortas") }
-                BotonCategoria("Pasteles", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Pasteles") }
-                BotonCategoria("Postres", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Postres") }
+                BotonCategoria("Todos") { viewModel.onCategoriaChanged("Todos") }
+                BotonCategoria("Tortas") { viewModel.onCategoriaChanged("Tortas") }
+                BotonCategoria("Pasteles") { viewModel.onCategoriaChanged("Pasteles") }
+                BotonCategoria("Postres") { viewModel.onCategoriaChanged("Postres") }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            LazyColumn(
+            Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-
-                items(1) {
-                    val verTorta = viewModel.mostrarProducto("Torta Frutos Rojos", "Tortas")
-                    val verCheesecake = viewModel.mostrarProducto("Cheesecake Arandanos", "Postres")
-
-                    if (verTorta || verCheesecake) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            if (verTorta) {
-                                ProductoCard(
-                                    nombre = "Torta Frutos Rojos",
-                                    descripcion = "Torta bizcocho vainilla con crema y frutos rojos.",
-                                    precio = "$45.000",
-                                    imagen = R.drawable.tortafrutosrojos,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            } else {
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
-                            if (verCheesecake) {
-                                ProductoCard(
-                                    nombre = "Cheesecake Arandanos",
-                                    descripcion = "Cheesecake cremoso con coulds de arandanos.",
-                                    precio = "$38.000",
-                                    imagen = R.drawable.cheskake,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            } else {
-                                Spacer(modifier = Modifier.weight(1f))
-                            }
-                        }
-                    }
+                if (viewModel.mostrarProducto("Torta Frutos Rojos", "Tortas")) {
+                    ProductoCard(
+                        nombre = "Torta Frutos Rojos",
+                        descripcion = "Torta bizcocho vainilla con crema y frutos rojos.",
+                        precio = "$45.000",
+                        imagen = R.drawable.tortafrutosrojos,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
+                }
+                if (viewModel.mostrarProducto("Cheesecake Arandanos", "Postres")) {
+                    ProductoCard(
+                        nombre = "Cheesecake Arandanos",
+                        descripcion = "Cheesecake cremoso con coulds de arandanos.",
+                        precio = "$38.000",
+                        imagen = R.drawable.cheskake,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
                 }
             }
         }
@@ -180,7 +164,7 @@ private fun BotonCategoria(
         ),
         border = BorderStroke(1.dp, Dorado),
         shape = CircleShape,
-        contentPadding = PaddingValues(horizontal = 4.dp)
+        contentPadding = PaddingValues(horizontal = 12.dp)
     ) {
         Text(
             text = texto,
@@ -190,7 +174,7 @@ private fun BotonCategoria(
     }
 }
 
-
+// Card de un producto: imagen arriba, nombre, descripción y precio
 @Composable
 private fun ProductoCard(
     nombre: String,

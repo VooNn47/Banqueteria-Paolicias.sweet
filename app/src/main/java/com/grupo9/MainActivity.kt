@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.grupo9.ui.navigation.AppNavigation
+import com.grupo9.ui.theme.BanqueteriaTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -11,7 +12,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
-            AppNavigation()
+            BanqueteriaTheme {
+                AppNavigation()
+            }
         }
     }
 }

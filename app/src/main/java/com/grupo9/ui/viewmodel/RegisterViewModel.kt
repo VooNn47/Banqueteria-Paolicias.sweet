@@ -1,6 +1,6 @@
 package com.grupo9.ui.viewmodel
+
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
@@ -45,11 +45,6 @@ class RegisterViewModel : ViewModel(){
             uiState = uiState.copy(errorMessage = "Las contraseñas deben se iguales.")
             return
         }
-
-        //Si las validaciones son correctas, enviamos hacia consola Log
-        Log.d("RegisterVM", "Usuario Registrado: ${state.name} (${state.email})")
-        uiState = uiState.copy(errorMessage = null)
-        onSuccess()
 
         viewModelScope.launch {
             val db = AppDatabase.getDatabase(context)

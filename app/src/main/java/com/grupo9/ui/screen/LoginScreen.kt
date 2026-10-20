@@ -32,7 +32,6 @@ import com.grupo9.ui.viewmodel.LoginViewModel
 fun LoginScreen(
     onNavigateToRegister: () -> Unit,
     onLoginSuccess: () -> Unit,
-    onNavigateToHome: () -> Unit,
     viewModel: LoginViewModel = viewModel()
 ) {
     val state = viewModel.uiState
@@ -75,10 +74,10 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if (viewModel.errormMessage != null) {
+            if (viewModel.errorMessage != null) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = viewModel.errormMessage!!,
+                    text = viewModel.errorMessage!!,
                     color = Color.Red,
                     style = MaterialTheme.typography.bodyMedium
                 )
