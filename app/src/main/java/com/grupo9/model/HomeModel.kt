@@ -1,4 +1,6 @@
 package com.grupo9.model
 
-class HomeModel {
-}
+data class HomeModel(
+    val busqueda: String = "",
+    val categoria: String = "Todos"
+)

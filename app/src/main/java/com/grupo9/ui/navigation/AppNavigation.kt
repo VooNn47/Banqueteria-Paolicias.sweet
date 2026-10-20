@@ -16,6 +16,7 @@ import com.grupo9.ui.screen.PerfilScreen
 import com.grupo9.ui.screen.RegisterScreen
 import com.grupo9.ui.screen.ReservaScreen
 import com.grupo9.ui.viewmodel.AgendaViewmodel
+import com.grupo9.ui.viewmodel.HomeViewModel
 
 object Routes {
     const val INICIO = "INICIO"
@@ -66,8 +67,10 @@ fun AppNavigation() {
         }
 
         composable(Routes.HOME) {
+            val homeViewModel: HomeViewModel = viewModel()
+
             HomeScreen(
-                onNavigateToLogin = { navController.navigate(Routes.LOGIN) },
+                viewModel = homeViewModel,
                 onNavigateToReserva = {
                     navController.navigate(Routes.RESERVA) { launchSingleTop = true }
                 },

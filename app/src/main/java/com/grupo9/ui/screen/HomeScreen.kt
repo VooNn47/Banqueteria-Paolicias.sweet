@@ -40,10 +40,11 @@ import com.grupo9.ui.theme.BlancoHueso
 import com.grupo9.ui.theme.Burdeos
 import com.grupo9.ui.theme.Dorado
 import com.grupo9.ui.theme.MarronSuave
+import com.grupo9.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    onNavigateToLogin: () -> Unit,
+    viewModel: HomeViewModel,
     onNavigateToReserva: () -> Unit,
     onNavigateToAgenda: () -> Unit,
     onNavigateToPerfil: () -> Unit,
@@ -95,8 +96,8 @@ fun HomeScreen(
                 .padding(innerPadding)
         ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
+                value = viewModel.uiState.busqueda,
+                onValueChange = { viewModel.onBusquedaChanged(it) },
                 label = { Text("Buscar productos...") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -109,10 +110,10 @@ fun HomeScreen(
                     .padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                BotonCategoria("Todos", Modifier.weight(1f))
-                BotonCategoria("Tortas", Modifier.weight(1f))
-                BotonCategoria("Pasteles", Modifier.weight(1f))
-                BotonCategoria("Postres", Modifier.weight(1f))
+                BotonCategoria("Todos", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Todos") }
+                BotonCategoria("Tortas", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Tortas") }
+                BotonCategoria("Pasteles", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Pasteles") }
+                BotonCategoria("Postres", Modifier.weight(1f)) { viewModel.onCategoriaChanged("Postres") }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -122,27 +123,40 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
-                items(2) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        ProductoCard(
-                            nombre = "Torta Frutos Rojos",
-                            descripcion = "Torta bizcocho vainilla con crema y frutos rojos.",
-                            precio = "$45.000",
-                            imagen = R.drawable.tortafrutosrojos,
-                            modifier = Modifier.weight(1f)
-                        )
-                        ProductoCard(
-                            nombre = "Cheesecake Arandanos",
-                            descripcion = "Cheesecake cremoso con coulds de arandanos.",
-                            precio = "$38.000",
-                            imagen = R.drawable.cheskake,
-                            modifier = Modifier.weight(1f)
-                        )
+                items(1) {
+                    val verTorta = viewModel.mostrarProducto("Torta Frutos Rojos", "Tortas")
+                    val verCheesecake = viewModel.mostrarProducto("Cheesecake Arandanos", "Postres")
+
+                    if (verTorta || verCheesecake) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            if (verTorta) {
+                                ProductoCard(
+                                    nombre = "Torta Frutos Rojos",
+                                    descripcion = "Torta bizcocho vainilla con crema y frutos rojos.",
+                                    precio = "$45.000",
+                                    imagen = R.drawable.tortafrutosrojos,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            } else {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                            if (verCheesecake) {
+                                ProductoCard(
+                                    nombre = "Cheesecake Arandanos",
+                                    descripcion = "Cheesecake cremoso con coulds de arandanos.",
+                                    precio = "$38.000",
+                                    imagen = R.drawable.cheskake,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            } else {
+                                Spacer(modifier = Modifier.weight(1f))
+                            }
+                        }
                     }
                 }
             }
@@ -176,7 +190,7 @@ private fun BotonCategoria(
     }
 }
 
-// Card de un producto: imagen arriba, nombre, descripción y precio
+
 @Composable
 private fun ProductoCard(
     nombre: String,
@@ -212,12 +226,13 @@ private fun ProductoCard(
     }
 }
 
+@Suppress("ViewModelConstructorInComposable")
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     BanqueteriaTheme {
         HomeScreen(
-            onNavigateToLogin = {},
+            viewModel = HomeViewModel(),
             onNavigateToReserva = {},
             onNavigateToAgenda = {},
             onNavigateToPerfil = {}
