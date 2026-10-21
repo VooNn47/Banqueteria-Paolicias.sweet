@@ -8,10 +8,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.grupo9.model.Sesion
 import com.grupo9.ui.screen.AgendaScreen
 import com.grupo9.ui.screen.BanqueteriaScreen
 import com.grupo9.ui.screen.HomeScreen
 import com.grupo9.ui.screen.LoginScreen
+import com.grupo9.ui.screen.PanelAdminScreen
 import com.grupo9.ui.screen.PerfilScreen
 import com.grupo9.ui.screen.RegisterScreen
 import com.grupo9.ui.screen.ReservaScreen
@@ -26,6 +28,7 @@ object Routes {
     const val AGENDA = "Agenda"
     const val RESERVA = "Reserva"
     const val PERFIL = "Perfil"
+    const val ADMIN = "Admin"
 }
 
 @Composable
@@ -47,7 +50,8 @@ fun AppNavigation() {
             LoginScreen(
                 onNavigateToRegister = { navController.navigate(Routes.REGISTER) },
                 onLoginSuccess = {
-                    navController.navigate(Routes.HOME) {
+                    val destino = if (Sesion.esAdmin) Routes.ADMIN else Routes.HOME
+                    navController.navigate(destino) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
                 }
@@ -132,6 +136,16 @@ fun AppNavigation() {
                 },
                 onNavigateToReserva = {
                     navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                }
+            )
+        }
+
+        composable(Routes.ADMIN) {
+            PanelAdminScreen(
+                onLogout = {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(Routes.ADMIN) { inclusive = true }
+                    }
                 }
             )
         }

@@ -1,4 +1,5 @@
 package com.grupo9.model
 
-class PanelAdminModel {
-}
+data class PanelAdminModel(
+    val filtro: String = "Todas"
+)

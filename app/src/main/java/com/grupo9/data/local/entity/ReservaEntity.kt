@@ -12,5 +12,7 @@ data class ReservaEntity(
     val fecha: String,
     val horario: String,
     val invitados: String,
-    val observaciones: String
+    val observaciones: String,
+    val correoCliente: String = "",
+    val estadoAbono: String = "Pendiente"
 )

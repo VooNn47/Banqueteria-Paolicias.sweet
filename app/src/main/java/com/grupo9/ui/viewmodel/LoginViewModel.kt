@@ -45,6 +45,7 @@ class LoginViewModel : ViewModel() {
             if (user != null && user.password == password) {
                 errorMessage = null
                 Sesion.correo = email
+                Sesion.esAdmin = (email == "admin@paolicias.cl")
                 onSuccess()
             } else {
                 errorMessage = "Correo o contraseña incorrectos"

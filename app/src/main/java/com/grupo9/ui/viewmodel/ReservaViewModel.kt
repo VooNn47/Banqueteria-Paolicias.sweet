@@ -1,4 +1,3 @@
-
 package com.grupo9.ui.viewmodel
 
 import android.content.Context
@@ -10,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.grupo9.data.local.database.AppDatabase
 import com.grupo9.data.local.entity.ReservaEntity
 import com.grupo9.model.ReservaModel
+import com.grupo9.model.Sesion
 import kotlinx.coroutines.launch
 
 class ReservaViewmodel : ViewModel() {
@@ -66,7 +66,8 @@ class ReservaViewmodel : ViewModel() {
                 fecha = state.fecha,
                 horario = state.horario,
                 invitados = state.invitados,
-                observaciones = state.observaciones
+                observaciones = state.observaciones,
+                correoCliente = Sesion.correo
             )
 
             db.reservaDao().guardarReserva(nuevaReserva)

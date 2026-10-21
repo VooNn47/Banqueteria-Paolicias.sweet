@@ -15,4 +15,10 @@ interface ReservaDao {
 
     @Query("SELECT * FROM reservas ORDER BY id DESC LIMIT 1")
     suspend fun obtenerReservas(): ReservaEntity?
+
+    @Query("SELECT * FROM reservas ORDER BY fecha ASC")
+    suspend fun obtenerTodas(): List<ReservaEntity>
+
+    @Query("UPDATE reservas SET estadoAbono = :estado WHERE id = :id")
+    suspend fun actualizarEstado(id: Int, estado: String)
 }
