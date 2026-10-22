@@ -2,6 +2,8 @@ package com.grupo9.ui.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,6 +21,8 @@ import com.grupo9.ui.screen.RegisterScreen
 import com.grupo9.ui.screen.ReservaScreen
 import com.grupo9.ui.viewmodel.AgendaViewmodel
 import com.grupo9.ui.viewmodel.HomeViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 object Routes {
     const val INICIO = "INICIO"
@@ -34,6 +38,8 @@ object Routes {
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
+    val demora = 500L // milisegundos de espera antes de cambiar de pantalla
 
     NavHost(
         navController = navController,
@@ -42,17 +48,30 @@ fun AppNavigation() {
     ) {
         composable(Routes.INICIO) {
             BanqueteriaScreen(
-                onNavigateToLogin = { navController.navigate(Routes.LOGIN) }
+                onNavigateToLogin = {
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.LOGIN)
+                    }
+                }
             )
         }
 
         composable(Routes.LOGIN) {
             LoginScreen(
-                onNavigateToRegister = { navController.navigate(Routes.REGISTER) },
+                onNavigateToRegister = {
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.REGISTER)
+                    }
+                },
                 onLoginSuccess = {
-                    val destino = if (Sesion.esAdmin) Routes.ADMIN else Routes.HOME
-                    navController.navigate(destino) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    scope.launch {
+                        delay(demora)
+                        val destino = if (Sesion.esAdmin) Routes.ADMIN else Routes.HOME
+                        navController.navigate(destino) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
                     }
                 }
             )
@@ -61,11 +80,19 @@ fun AppNavigation() {
         composable(Routes.REGISTER) {
             RegisterScreen(
                 onNavigateToLogin = {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
                     }
                 },
-                onNavigateToBack = { navController.popBackStack() }
+                onNavigateToBack = {
+                    scope.launch {
+                        delay(demora)
+                        navController.popBackStack()
+                    }
+                }
             )
         }
 
@@ -75,13 +102,22 @@ fun AppNavigation() {
             HomeScreen(
                 viewModel = homeViewModel,
                 onNavigateToReserva = {
-                    navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    }
                 },
                 onNavigateToAgenda = {
-                    navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    }
                 },
                 onNavigateToPerfil = {
-                    navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    }
                 }
             )
         }
@@ -90,19 +126,30 @@ fun AppNavigation() {
             val context = LocalContext.current
             val agendaViewmodel: AgendaViewmodel = viewModel()
 
-            agendaViewmodel.cargarReserva(context)
+            LaunchedEffect(Unit) {
+                agendaViewmodel.cargarReserva(context)
+            }
 
             AgendaScreen(
                 onNavigateToHome = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) { inclusive = false }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.HOME) { inclusive = false }
+                        }
                     }
                 },
                 onNavigateToReserva = {
-                    navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    }
                 },
                 onNavigateToPerfil = {
-                    navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    }
                 },
                 agendaViewmodel = agendaViewmodel
             )
@@ -111,15 +158,24 @@ fun AppNavigation() {
         composable(Routes.RESERVA) {
             ReservaScreen(
                 onNavigateToHome = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) { inclusive = false }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.HOME) { inclusive = false }
+                        }
                     }
                 },
                 onNavigateToAgenda = {
-                    navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    }
                 },
                 onNavigateToPerfil = {
-                    navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.PERFIL) { launchSingleTop = true }
+                    }
                 }
             )
         }
@@ -127,15 +183,24 @@ fun AppNavigation() {
         composable(Routes.PERFIL) {
             PerfilScreen(
                 onNavigateToHome = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) { inclusive = false }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.HOME) { inclusive = false }
+                        }
                     }
                 },
                 onNavigateToAgenda = {
-                    navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.AGENDA) { launchSingleTop = true }
+                    }
                 },
                 onNavigateToReserva = {
-                    navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.RESERVA) { launchSingleTop = true }
+                    }
                 }
             )
         }
@@ -143,8 +208,11 @@ fun AppNavigation() {
         composable(Routes.ADMIN) {
             PanelAdminScreen(
                 onLogout = {
-                    navController.navigate(Routes.LOGIN) {
-                        popUpTo(Routes.ADMIN) { inclusive = true }
+                    scope.launch {
+                        delay(demora)
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(Routes.ADMIN) { inclusive = true }
+                        }
                     }
                 }
             )

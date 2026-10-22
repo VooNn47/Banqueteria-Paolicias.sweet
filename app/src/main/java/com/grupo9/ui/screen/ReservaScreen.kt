@@ -39,6 +39,7 @@ fun ReservaScreen(
     val uiState = reservaViewModel.uiState
     val context = LocalContext.current
 
+
     Scaffold(
         topBar = { Header(title = "Reservar evento") },
         bottomBar = {
@@ -71,32 +72,48 @@ fun ReservaScreen(
 
             Spacer(modifier = Modifier.height(4.dp))
 
-            CampoReserva(
-                valor = uiState.nombreEvento,
-                etiqueta = "Nombre del evento",
-                onCambio = { reservaViewModel.onNombreEventoChanged(it) }
+            OutlinedTextField(
+                value = uiState.nombreEvento,
+                onValueChange = { reservaViewModel.onNombreEventoChanged(it) },
+                label = { Text("Nombre del evento") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
-            CampoReserva(
-                valor = uiState.fecha,
-                etiqueta = "Fecha del evento",
-                onCambio = { reservaViewModel.onFechaChanged(it) }
+
+            OutlinedTextField(
+                value = uiState.fecha,
+                onValueChange = { reservaViewModel.onFechaChanged(it) },
+                label = { Text("Fecha del evento") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
-            CampoReserva(
-                valor = uiState.horario,
-                etiqueta = "Horario",
-                onCambio = { reservaViewModel.onHorarioChanged(it) }
+
+            OutlinedTextField(
+                value = uiState.horario,
+                onValueChange = { reservaViewModel.onHorarioChanged(it) },
+                label = { Text("Horario") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
-            CampoReserva(
-                valor = uiState.invitados,
-                etiqueta = "Cantidad de invitados",
-                onCambio = { reservaViewModel.onInvitadosChanged(it) },
-                teclado = KeyboardType.Number
+
+            OutlinedTextField(
+                value = uiState.invitados,
+                onValueChange = { reservaViewModel.onInvitadosChanged(it) },
+                label = { Text("Cantidad de invitados") },
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                singleLine = true
             )
-            CampoReserva(
-                valor = uiState.observaciones,
-                etiqueta = "Observaciones",
-                onCambio = { reservaViewModel.onObservacionesChanged(it) }
+
+            OutlinedTextField(
+                value = uiState.observaciones,
+                onValueChange = { reservaViewModel.onObservacionesChanged(it) },
+                label = { Text("Observaciones") },
+                modifier = Modifier.fillMaxWidth()
             )
+
 
             if (reservaViewModel.errorMessage != null) {
                 Text(
@@ -116,7 +133,9 @@ fun ReservaScreen(
             }
 
             Button(
-                onClick = { reservaViewModel.guardarReserva(context) },
+                onClick = {
+                    vibrar(context, 1500L)
+                    reservaViewModel.guardarReserva(context) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(50)
             ) {

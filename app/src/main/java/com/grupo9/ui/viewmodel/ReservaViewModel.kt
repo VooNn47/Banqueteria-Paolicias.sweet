@@ -58,6 +58,14 @@ class ReservaViewmodel : ViewModel() {
             return
         }
 
+        // Validar que los invitados sean un número entre 1 y 100
+        val cantidad = state.invitados.trim().toIntOrNull()
+        if (cantidad == null || cantidad < 1 || cantidad > 100) {
+            errorMessage = "Los invitados deben ser un número entre 1 y 100."
+            successMessage = null
+            return
+        }
+
         viewModelScope.launch {
             val db = AppDatabase.getDatabase(context)
 
@@ -65,7 +73,7 @@ class ReservaViewmodel : ViewModel() {
                 nombreEvento = state.nombreEvento,
                 fecha = state.fecha,
                 horario = state.horario,
-                invitados = state.invitados,
+                invitados = state.invitados.trim(),
                 observaciones = state.observaciones,
                 correoCliente = Sesion.correo
             )

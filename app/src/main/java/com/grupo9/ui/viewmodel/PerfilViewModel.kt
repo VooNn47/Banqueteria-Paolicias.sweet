@@ -15,6 +15,9 @@ class PerfilViewModel : ViewModel() {
     var uiState by mutableStateOf(PerfilModel())
         private set
 
+    var saldo by mutableStateOf(0)
+        private set
+
     fun cargarPerfil(context: Context, email: String) {
         viewModelScope.launch {
             val db = AppDatabase.getDatabase(context)
@@ -25,6 +28,37 @@ class PerfilViewModel : ViewModel() {
                     nombre = user.name,
                     correo = user.email
                 )
+            }
+            db.saldoDao().crearSaldoInicial()
+            cargarSaldo(context)
+        }
+    }
+    fun cargarSaldo(context: Context) {
+        viewModelScope.launch {
+            val db = AppDatabase.getDatabase(context)
+            val saldoGuardado = db.saldoDao().obtenerSaldo()
+
+            if (saldoGuardado != null) {
+                saldo = saldoGuardado.monto
+            }
+        }
+    }
+
+    fun ingresarMonto(context: Context, monto: Int) {
+        if (monto <= 0) {
+            return
+        }
+
+        viewModelScope.launch {
+            val db = AppDatabase.getDatabase(context)
+
+            db.saldoDao().crearSaldoInicial()
+            db.saldoDao().sumarSaldo(monto)
+
+            val saldoGuardado = db.saldoDao().obtenerSaldo()
+
+            if (saldoGuardado != null) {
+                saldo = saldoGuardado.monto
             }
         }
     }

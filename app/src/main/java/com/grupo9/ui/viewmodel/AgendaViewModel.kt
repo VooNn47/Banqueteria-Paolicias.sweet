@@ -34,4 +34,28 @@ class AgendaViewmodel : ViewModel() {
             uiState = uiState.copy(reserva = reserva)
         }
     }
+    fun pagarReserva(context: Context, precio: Int) {
+        viewModelScope.launch {
+            val db = AppDatabase.getDatabase(context)
+
+            val saldoGuardado = db.saldoDao().obtenerSaldo()
+
+            if (saldoGuardado != null && saldoGuardado.monto >= precio) {
+                val reserva = uiState.reserva
+
+                if (reserva != null && !reserva.pagada) {
+                    val resultado = db.saldoDao().descontarSaldo(precio)
+
+                    if (resultado > 0) {
+                        db.reservaDao().marcarReservaPagada(reserva.id)
+                        cargarReserva(context)
+                    }
+                } else {
+                    errorMessage = "La reserva ya está pagada o no existe."
+                }
+            } else {
+                errorMessage = "No tienes saldo suficiente para pagar la reserva."
+            }
+        }
+    }
 }

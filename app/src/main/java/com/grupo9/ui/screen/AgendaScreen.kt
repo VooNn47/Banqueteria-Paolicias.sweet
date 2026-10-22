@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,7 +45,34 @@ fun AgendaScreen(
     agendaViewmodel: AgendaViewmodel = viewModel()
 ) {
     val reservas = agendaViewmodel.uiState.reserva
+    val context = LocalContext.current
+    val invitados = reservas?.invitados?.toIntOrNull() ?: 0
 
+    val precio: Int
+
+    if (invitados >= 1 && invitados <= 10) {
+        precio = 30000
+    } else if (invitados >= 11 && invitados <= 20) {
+        precio = 50000
+    } else if (invitados >= 21 && invitados <= 30) {
+        precio = 80000
+    } else if (invitados >= 31 && invitados <= 40) {
+        precio = 100000
+    } else if (invitados >= 41 && invitados <= 50) {
+        precio = 120000
+    } else if (invitados >= 51 && invitados <= 60) {
+        precio = 140000
+    } else if (invitados >= 61 && invitados <= 70) {
+        precio = 160000
+    } else if (invitados >= 71 && invitados <= 80) {
+        precio = 180000
+    } else if (invitados >= 81 && invitados <= 90) {
+        precio = 200000
+    } else if (invitados >= 91 && invitados <= 100) {
+        precio = 220000
+    } else {
+        precio = 0
+    }
     Scaffold(
         topBar = { Header(title = "Mi Agenda") },
         bottomBar = {
@@ -126,29 +155,35 @@ fun AgendaScreen(
                                 fontWeight = FontWeight.Bold,
                                 color = Burdeos
                             )
-                            InfoFila("Fecha", reservas.fecha.toString())
-                            InfoFila("Horario", reservas.horario.toString())
-                            InfoFila("Invitados", reservas.invitados.toString())
-                            InfoFila("Observaciones", reservas.observaciones.toString())
+                            Text(text = "Fecha: ${reservas.fecha}", fontSize = 15.sp)
+                            Text(text = "Horario: ${reservas.horario}", fontSize = 15.sp)
+                            Text(text = "Invitados: ${reservas.invitados}", fontSize = 15.sp)
+                            Text(text = "Observaciones: ${reservas.observaciones}", fontSize = 15.sp)
+                            Text(text = "Precio del evento: $$precio", fontSize = 15.sp)
                         }
                     }
                 }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = {
+                    if (reservas != null) {
+                        agendaViewmodel.pagarReserva(context, precio)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+
+                ) {
+                Text(text = "Pagar reserva")
             }
         }
     }
 }
 
-@Composable
-private fun InfoFila(etiqueta: String, valor: String) {
-    Row {
-        Text(
-            text = "$etiqueta: ",
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp
-        )
-        Text(text = valor, fontSize = 15.sp)
-    }
-}
+
+
 
 @Preview(showBackground = true)
 @Composable

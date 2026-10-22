@@ -1,4 +1,3 @@
-
 package com.grupo9.data.local.entity
 
 import androidx.room.Entity
@@ -14,5 +13,6 @@ data class ReservaEntity(
     val invitados: String,
     val observaciones: String,
     val correoCliente: String = "",
-    val estadoAbono: String = "Pendiente"
+    val estadoAbono: String = "Pendiente",
+    val pagada: Boolean = false
 )

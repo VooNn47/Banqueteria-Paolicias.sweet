@@ -1,4 +1,3 @@
-
 package com.grupo9.data.local.dao
 
 import androidx.room.Dao
@@ -21,4 +20,7 @@ interface ReservaDao {
 
     @Query("UPDATE reservas SET estadoAbono = :estado WHERE id = :id")
     suspend fun actualizarEstado(id: Int, estado: String)
+
+    @Query("UPDATE reservas SET pagada = 1, estadoAbono = 'Pagado' WHERE id = :id AND pagada = 0")
+    suspend fun marcarReservaPagada(id: Int): Int
 }
