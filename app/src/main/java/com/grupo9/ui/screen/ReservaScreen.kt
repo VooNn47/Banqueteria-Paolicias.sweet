@@ -146,20 +146,3 @@ fun ReservaScreen(
 }
 
 
-@Composable
-private fun CampoReserva(
-    valor: String,
-    etiqueta: String,
-    onCambio: (String) -> Unit,
-    teclado: KeyboardType = KeyboardType.Text
-) {
-    OutlinedTextField(
-        value = valor,
-        onValueChange = onCambio,
-        label = { Text(etiqueta) },
-        singleLine = true,
-        shape = RoundedCornerShape(12.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = teclado),
-        modifier = Modifier.fillMaxWidth()
-    )
-}
